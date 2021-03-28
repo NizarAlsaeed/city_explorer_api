@@ -7,7 +7,10 @@ const PORT = 3000;
 const app = express();
 app.listen(PORT, ()=> console.log(`App is running on port: ${PORT}`));
 app.use(cors());
-
+app.get('/cors', (req, res) => {
+    res.send('Access-Control-Allow-Origin: Ok');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+});
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
 
