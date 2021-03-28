@@ -6,8 +6,7 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.listen(PORT, ()=> console.log(`App is running on port: ${PORT}`));
-let corsOptions = { origin: true };
-app.use(cors(corsOptions));
+app.use(cors());
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
 
@@ -33,7 +32,6 @@ function locationHandler(request,response){
     const resObj= new LocationResposeData(city,locationData[0].display_name,locationData[0].lat,locationData[0].lon);
 
     console.log('resObj', resObj);
-    response.setHeader('Access-Control-Allow-Origin', '*');
     response.send(resObj);
 
 }
@@ -49,7 +47,6 @@ function weatherHandler(request,response){
         resArr.push( new WeatherResposeData(obj.weather.description,obj.datetime));
     });
     console.log('resArr', resArr);
-    response.setHeader('Access-Control-Allow-Origin', '*');
     response.send(resArr);
 
 }
