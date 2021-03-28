@@ -1,0 +1,25 @@
+{
+  "name": "city-explorer-application",
+  "version": "1.0.0",
+  "description": " allowing a user to search for a location, present a Map, as well as interesting information about the area",
+  "main": "server.js",
+  "scripts": {
+    "test": "test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NizarAlsaeed/lab-06-09.git"
+  },
+  "author": "Nizar Alsaeed",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NizarAlsaeed/lab-06-09/issues"
+  },
+  "homepage": "https://github.com/NizarAlsaeed/lab-06-09#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  }
+}
