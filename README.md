@@ -26,11 +26,11 @@ using js
 
 ### Time Estimation
 
-Number and name of feature: ________________________________
+Number and name of feature: \#1:Locations
 
-Estimate of time needed to complete: _____
+Estimate of time needed to complete: 30 min
 
-Start time: _____
+Start time: 3:50
 
 Finish time: _____
 
