@@ -51,13 +51,13 @@ function locationHandler(request,response){
     });
 
 }
-
+///weather?search_query=tafila&formatted_query=Tafilah, Jordan&latitude=30.80659845&longitude=35.6627330553412&page=1
 function weatherHandler(request,response){
     let key = process.env.WEATHERBIT_API_KEY;
-    const city = request.query.city;
-    console.log('city', city);
-    let lanandLonObj = getLatAndLon(city);
-    const url = `https://api.weatherbit.io/v2.0/current?lat=${lanandLonObj.lat}&lon=${lanandLonObj.lon}&key=${key}&include=minutely`;
+    const cityInfo = request.query;
+    //console.log('city', city);
+    //let lanandLonObj = getLatAndLon(city);
+    const url = `https://api.weatherbit.io/v2.0/current?lat=${cityInfo.latitude}&lon=${cityInfo.longitude}&key=${key}&include=minutely`;
     console.log('url', url);
 
     superagent.get(url).then(weatherData=>{
