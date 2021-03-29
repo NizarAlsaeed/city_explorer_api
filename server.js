@@ -11,9 +11,10 @@ app.listen(PORT, ()=> console.log(`App is running on port: ${PORT}`));
 app.use(cors());
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
+app.get('/parks', parksHandler);
 app.use(errorHandler);
 
-function errorHandler(err, request, response, next) {
+function errorHandler(err, request, response,next) {
 
     console.log('err',err );
     response.status(500).send('something is wrong in server');
@@ -35,28 +36,40 @@ function WeatherResposeData (forecast,time){
 }
 let WeatherResposeDataArr=[];
 
+function ParksResposeData (name,address,fee,description,url){
+    this.name= name;
+    this.address= address;
+    this.fee=fee;
+    this.description=description;
+    this.url=url;
+    ParksResposeDataArr.push(this);
+}
+let ParksResposeDataArr=[];
+
 
 function locationHandler(request,response){
-    let key = process.env.GEOCODE_API_KEY;
     const city = request.query.city;
-    const url = `https://eu1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json`;
+    let cashed = false;
+    LocationResposeDataArr.forEach(obj=>{if(obj.search_query===city){cashed=true; response.send(obj); console.log('cashed')}});
+    if(!cashed){
+        let key = process.env.GEOCODE_API_KEY;
+        const url = `https://eu1.locationiq.com/v1/search.php?key=${key}&q=${city}&format=json`;
 
-    superagent.get(url).then(locationData=>{
-        const resObj= new LocationResposeData(city,locationData.body[0].display_name,locationData.body[0].lat,locationData.body[0].lon);
-        console.log('LocationResposeDataArr',LocationResposeDataArr);
-        response.send(resObj);
-    }).catch(err=>{
-        console.log('ERROR IN LOCATION API');
-        console.log(err);
-    });
+        superagent.get(url).then(locationData=>{
+            const resObj= new LocationResposeData(city,locationData.body[0].display_name,locationData.body[0].lat,locationData.body[0].lon);
+            console.log('LocationResposeDataArr',LocationResposeDataArr);
+            response.send(resObj);
+        }).catch(err=>{
+            console.log('ERROR IN LOCATION API');
+            console.log(err);
+        });
+    }
 
 }
-///weather?search_query=tafila&formatted_query=Tafilah, Jordan&latitude=30.80659845&longitude=35.6627330553412&page=1
 function weatherHandler(request,response){
     let key = process.env.WEATHERBIT_API_KEY;
     const cityInfo = request.query;
-    //console.log('city', city);
-    //let lanandLonObj = getLatAndLon(city);
+
     const url = `https://api.weatherbit.io/v2.0/current?lat=${cityInfo.latitude}&lon=${cityInfo.longitude}&key=${key}&include=minutely`;
     console.log('url', url);
 
@@ -67,16 +80,17 @@ function weatherHandler(request,response){
         response.send(resArr);
     });
 }
-
-function getLatAndLon(city){
-    let ans={};
-    LocationResposeDataArr.forEach(obj=>{
-        if(obj.search_query===city){
-            ans.lat = obj.latitude;
-            ans.lon = obj.longitude;
-        }
+function parksHandler(request,response){
+    let key = process.env.PARKS_API_KEY;
+    const cityInfo = request.query;
+    const url = `https://developer.nps.gov/api/v1/parks?q=${cityInfo.formatted_query}&limit=3&api_key=${key}`;
+    console.log('url', url);
+    superagent.get(url).then(parksData=>{
+        let resArr = parksData.body.data.map(obj=> {
+            return new ParksResposeData(obj.fullName,obj.addresses[0].city,obj.entranceFees[0].cost,obj.description,obj.url);
+        });
+        response.send(resArr);
     });
-    return ans;
 }
 
 
