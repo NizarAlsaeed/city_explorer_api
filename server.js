@@ -6,7 +6,14 @@ const cors = require('cors');
 const superagent = require('superagent');
 const pg = require('pg');
 const PORT = process.env.PORT;
-const client = new pg.Client(process.env.DATABASE_URL);
+const client = new pg.Client({
+    user:'qnnjjrtuiknatu',
+    password:'9b583d2faed2854e7141cca48ad64a5ddfdf43d08c3488a7e50e8ecb79efc0f6',
+    database:'d77fuiqskpi0rr',
+    port:5432,
+    host:'ec2-34-254-69-72.eu-west-1.compute.amazonaws.com',
+    ssl: true,
+});
 const app = express();
 app.use(cors());
 app.get('/location', locationHandler);
